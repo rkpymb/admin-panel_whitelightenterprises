@@ -1,0 +1,36 @@
+name: Deploy to Dev Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH keys
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.DEV_SERVER_PRIVATE_KEY }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Delete and copy new code
+        run: |
+          ssh -o StrictHostKeyChecking=no cicd@34.93.139.74 "
+          cd /home/cicd/projects
+          find ./partners -mindepth 1 ! -regex '^./partners/node_modules\(/.*\)?' -delete"
+          rsync -avz app components hooks constants lib types public yarn.lock tsconfig.json tailwind.config.js postcss.config.js package.json package-lock.json next.config.js middleware.js components.json cicd@34.93.139.74:/home/cicd/projects/partners
+
+
+      - name: Stop & build server & start server
+        run: |
+          ssh -o StrictHostKeyChecking=no cicd@34.93.139.74 "
+            cd /home/cicd/projects/partners
+            pm2 stop partners-server 2> /dev/null || true
+            pm2 delete partners-server 2> /dev/null || true
+            npm install
+            npm run build
+            pm2 start 'npm run prod:start' --name partners-server"
