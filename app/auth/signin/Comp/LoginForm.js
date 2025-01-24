@@ -61,7 +61,7 @@ function LoginForm() {
 
         // Redirect to callbackUrl
        
-        window.location.href = callbackUrl;
+        window.location.href = '/dashboard';
       } else {
         form.setError('password', { message: response.data.msg });
         setLoading(false);
