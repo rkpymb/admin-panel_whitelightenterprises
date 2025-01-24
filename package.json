@@ -10,7 +10,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prod:start": "next start -p 3001",
+    "prod:start": "next start",
     "lint": "next lint",
     "format": "prettier . --write",
     "prepare": "husky"
