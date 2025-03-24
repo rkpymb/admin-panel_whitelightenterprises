@@ -69,7 +69,7 @@ export default function Sidebar({ className }: SidebarProps) {
             <div className="flex flex-row gap-2 items-center">
               <span>Developed and Design by</span>
               <a href="/" target="_blank" className="underline font-semibold">
-            rk developer
+            rk developer.
               </a>
             </div>
           </div>
